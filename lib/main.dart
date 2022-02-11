@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:training_note/view/account/login.dart';
 import 'package:training_note/view/parts/navigation_bar.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: '筋トレ記録アプリ'),
+      home: const Login()
     );
   }
 }
@@ -41,6 +42,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    int selectedIndex = 0;
+    // List<Widget> pageList = [TimeLinePage(), AccountPage()];
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
