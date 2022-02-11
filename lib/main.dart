@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//  testtest
+import 'package:training_note/view/parts/navigation_bar.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,27 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  List<BottomNavigationBarItem> bottomNavBarItems() {
-    return[
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        label: 'HOME',
-      ),
-      const BottomNavigationBarItem(
-          icon: Icon(Icons.add),
-          label: '記録',
-      ),
-      const BottomNavigationBarItem(
-          icon: Icon(Icons.health_and_safety_sharp),
-          label: '体重',
-      ),
-      const BottomNavigationBarItem(
-        icon: Icon(Icons.settings),
-        label: '設定',
-      ),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,10 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: bottomNavBarItems(),
-        type: BottomNavigationBarType.fixed,
-      ),
-    );
+      bottomNavigationBar: NavigationBar.bottomNavigationBar()
+      );
   }
 }
