@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/navigation_bar.dart';
+import 'package:training_note/view/parts/home_page.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -43,26 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('筋トレ記録アプリ'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            const Text(
-              'aa',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: NavBar.bottomNavigationBar()
+      body: HomePage(),
       );
   }
 }
