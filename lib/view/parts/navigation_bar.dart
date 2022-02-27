@@ -1,7 +1,6 @@
-
 import 'package:flutter/material.dart';
 
-class NavigationBar {
+class NavBar {
   static BottomNavigationBar bottomNavigationBar() {
     List<BottomNavigationBarItem> bottomNavBarItems() {
       return[

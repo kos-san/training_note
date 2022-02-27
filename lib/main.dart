@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Text(
-              'You have pushed the button this many tssidmes:',
+              'You have pushed the button this many times:',
             ),
             const Text(
               'aa',
@@ -62,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      bottomNavigationBar: NavigationBar.bottomNavigationBar()
+      bottomNavigationBar: NavBar.bottomNavigationBar()
       );
   }
 }
