@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('筋トレ記録アプリ'),
       ),
       body: HomePage(),
+      bottomNavigationBar: NavBar.bottomNavigationBar(),
       );
   }
 }
