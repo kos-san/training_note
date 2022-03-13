@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                   vertical: 20,
                 ),
                 textStyle: TextStyle(
-                  fontSize: 15,
+                  fontSize: 16,
                 )
               ),
           ),
