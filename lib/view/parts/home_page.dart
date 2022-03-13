@@ -15,7 +15,6 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('カレンダー'),
           TableCalendar(
               focusedDay: DateTime.now(),
               firstDay: DateTime.utc(2020, 1, 1),
@@ -31,7 +30,9 @@ class _HomePageState extends State<HomePage> {
                     fontSize: 20,
                   ),
               ),
+              SizedBox(width: 20),
               Text(
+                // 合計トレーニング数を表示する
                   '〇〇日',
                 style: TextStyle(
                   fontSize: 20,
@@ -43,9 +44,17 @@ class _HomePageState extends State<HomePage> {
           SizedBox(height: 20),
           ElevatedButton(
               onPressed: (){
-                print('本日のトレーニングを追加');
               },
-              child: Text('本日のトレーニングを追加'),
+              child: Text('トレーニングを追加する'),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 50,
+                  vertical: 20,
+                ),
+                textStyle: TextStyle(
+                  fontSize: 15,
+                )
+              ),
           ),
         ],
       )
