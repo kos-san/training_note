@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/navigation_bar.dart';
-import 'package:training_note/view/test_view_page.dart';
+// import 'package:training_note/view/test_view_page.dart';
 import 'package:training_note/view/parts/home_page.dart';
 
 
@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: const MyHomePage(title: '筋トレ記録アプリ'),
-      home: const TestViewPage(),
+      home: const MyHomePage(title: '筋トレ記録アプリ'),
+      // home: const TestViewPage(),
     );
   }
 }
