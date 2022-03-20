@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "397071745820",
+    "project_id": "training-note-17220",
+    "storage_bucket": "training-note-17220.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397071745820:android:5baa264d44ab183a60f0d9",
+        "android_client_info": {
+          "package_name": "com.juicies.training_note"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397071745820-n0bprcgdos4ik881ikdqg2qgkm7pca78.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBp_SHgqUSdhTH8HLnZjBOMi8E3c91U2ls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397071745820-n0bprcgdos4ik881ikdqg2qgkm7pca78.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
