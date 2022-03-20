@@ -11,6 +11,9 @@ class Authentication {
       return true;
     }on FirebaseAuthException catch(e) {
       print('【Logger】 --ユーザ登録に失敗--');
+      print('------エラーログ【START】------');
+      print(e);
+      print('------エラーログ【END】------');
       return false;
     }
   }
