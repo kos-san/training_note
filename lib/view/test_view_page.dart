@@ -51,9 +51,7 @@ class _TestViewPageState extends State<TestViewPage> {
             SizedBox(height: 50),
             ElevatedButton(
                 onPressed: () async {
-                  if(nameController.text.isNotEmpty && emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
-                    var result = await Authentication.signUp(email: emailController.text, password: passwordController.text);
-                  }
+                  var result = await Authentication.signUp(email: emailController.text, password: passwordController.text);
                 },
                 child: const Text('アカウント作成')
             ),

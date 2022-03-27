@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/navigation_bar.dart';
-// import 'package:training_note/view/test_view_page.dart';
+import 'package:training_note/view/test_view_page.dart';
 import 'package:training_note/view/parts/home_page.dart';
 
 
