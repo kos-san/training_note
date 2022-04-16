@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:training_note/firebase/auth/authentication.dart';
+import 'package:training_note/model/user_info.dart';
 
 ///ユーザ登録の画面確認用のテストクラス
 ///後で削除予定
@@ -50,8 +51,12 @@ class _TestViewPageState extends State<TestViewPage> {
             ),
             SizedBox(height: 50),
             ElevatedButton(
-                onPressed: () async {
-                  var result = await Authentication.signUp(email: emailController.text, password: passwordController.text);
+                onPressed: () {
+                  dynamic result = Authentication.signUp(email: emailController.text, password: passwordController.text, name: "名前", gender: "男", birthDay: "20220416", passwordConfirm: passwordController.text);
+                  print(result.name);
+                  print(result.birthDay);
+                  print(result.gender);
+                  print(result.accountInfo);
                 },
                 child: const Text('アカウント作成')
             ),
