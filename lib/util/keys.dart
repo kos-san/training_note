@@ -1,4 +1,5 @@
 
+import 'package:training_note/model/account_info.dart';
 import 'package:training_note/model/user_info.dart';
 
 class Keys {
@@ -23,6 +24,7 @@ class Keys {
   static const String details = "結果詳細";
   ///キー情報：　ユーザ情報
   static Keys userInfo = Keys("userInfo", UserInfo);
+  static Keys accountInfo = Keys("accountInfo", AccountInfo);
 
   Keys(String key, dynamic model) {
     keyName = key;

@@ -1,6 +1,5 @@
-import 'dart:collection';
-import 'dart:ffi';
-
+// ignore_for_file: constant_identifier_names
+import 'package:training_note/firebase/auth/authentication.dart';
 import 'package:training_note/model/model.dart';
 
 ///ユーザ情報（Auth）専用のクラス
@@ -15,31 +14,15 @@ class AccountInfo extends Model{
   static const String KEY_password = "パスワード";
   static const String KEY_passConfirm = "確認用パスワード";
 
-  static const String KEY_result = "結果";
-  static const String KEY_details = "結果詳細";
-
-  ///パスワードとパスワード（確認用）が一致しなかった時のエラー返却値
-  static const String VAL_incorrectPassword = "パスワード不正";
-  ///パスワードの文字数が5文字以下だった場合のエラー返却値
-  static const String VAL_passwordCount = "パスワード文字数（5文字以下）";
-  ///メールアドレスの形式が不正だった場合のエラー返却値
-  static const String VAL_emailFormat = "メールアドレス形式不正";
-
   AccountInfo({this.uid = "",this.email = "", this.password = "", this.passwordConfirmation = ""});
-
-  ///■処理概要：　キーを元に、登録したユーザ情報の値を取得する
-  ///■前提条件：　ログインをしていること
-  String? getValue(String key) {
-    return _getMap()[key];
-  }
 
   setUid(String uid) {
     this.uid = uid;
   }
 
   ///■処理概要：　ユーザ情報の値をMapへ格納して返却する<br>
-  ///返却するMapの値はString型
-  Map<String, String> _getMap() {
+  @override
+  Map<String, dynamic> getMap() {
     return {
       KEY_uid: uid,
       KEY_email: email,
@@ -48,47 +31,74 @@ class AccountInfo extends Model{
     };
   }
 
-  Map registerJudge() {
-    Map mapResult = {
-      KEY_result: true
+  ///■機能概要：　メールアドレスが有効か確認する機能<br>
+  ///■入力情報：　String email　メールアドレス<br>
+  ///■返却情報：　Future<Map<String, dynamic>><br>
+  ///&#009; 1.KEY: String result <br>
+  ///&#009; 　VAL: bool result {true, false} <br>
+  ///&#009; 2.KEY: String detail <br>
+  ///&#009; 　VAL: String メールアドレスが登録できない場合のエラー理由<br>
+  static Future<Map<String, dynamic>> emailCheck({String email = ""}) async{
+    bool result = true;
+    String detail = "";
+
+    if(email.isEmpty) {
+      result = false;
+      detail = "メールアドレスを入力してください";
+    }
+    else if(!_isEmailValid(email)) {
+      result = false;
+      detail = "メールアドレスの形式が正しくありません";
+    }
+    else {
+      try {
+        var _result = await Authentication.emailCheck(email: email);
+        if(!_result) {
+          result = false;
+          detail = "メールアドレスが重複しています";
+        }
+      } catch(e) {
+        result = false;
+        detail = "その他エラー（サーバ接続エラー）";
+      }
+    }
+    Map<String, dynamic> mapResult = {
+        "result": result,
+        "detail": detail
+      };
+    return mapResult;
+  }
+
+  static bool _isEmailValid(String email) {
+    if (RegExp(r'^[0-9a-z_./?-]+@([0-9a-z-]+\.)+[0-9a-z-]+$')
+        .hasMatch(email)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static Future<Map<String, dynamic>> passwordCheck({String password = "", String passwordConfirmation = ""}) async{
+    bool result = true;
+    String detail = "";
+    Map<String, dynamic> mapResult = {
+      "result": result,
+      "detail": detail
     };
 
-    //入力情報が不正だった場合にエラー理由を格納するエラーリスト
-    Map mapDetails = {};
-
-    if(password.length < 6) {
-      //パスワードが5文字以下だった場合のエラー情報
-      mapDetails[KEY_password] = VAL_passwordCount;
-    }else if(password != passwordConfirmation) {
-      //パスワード（確認用）がパスワードと一致しなかった場合のエラー情報
-      mapDetails[KEY_passConfirm] = VAL_incorrectPassword;
+    if(password.isEmpty) {
+      result = false;
+      detail = "パスワードを入力してください";
     }
-
-    List<String> splEmail = email.split("");
-    bool atCheck = false;
-    bool datCheck = false;
-    for (var str in splEmail) {
-      if(str == "@") {
-        atCheck = true;
-      }
-      else if(str == ".") {
-        datCheck = true;
-      }
-      if(atCheck && datCheck) {
-        break;
-      }
+    else if(password.length < 6) {
+      result = false;
+      detail = "パスワードは6文字以上で入力してください";
     }
-    if(!(atCheck && datCheck)) {
-      //メールアドレスの形式が不正だった場合のエラー情報
-      mapDetails[KEY_email] = VAL_emailFormat;
-    }
-
-    if(mapDetails.isNotEmpty) {
-      mapResult[KEY_result] = false;
-      mapResult[KEY_details] = mapDetails;
+    else if(passwordConfirmation.isEmpty || password != passwordConfirmation) {
+      result = false;
+      detail = "パスワードが一致しません";
     }
 
     return mapResult;
   }
-
 }

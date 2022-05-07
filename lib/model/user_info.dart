@@ -1,24 +1,31 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:training_note/catalog/gender_cat.dart';
+import 'package:training_note/firebase/firestore/users.dart';
 import 'package:training_note/model/account_info.dart';
 import 'package:training_note/model/model.dart';
 /// ユーザ情報を保持するモデル
 class UserInfo extends Model{
-  late String userId;
   late String name;
-  late String gender;
+  late GenderCat gender;
   late String birthDay;
   Timestamp? createdTime;
   Timestamp? updatedTime;
 
   AccountInfo? accountInfo;
 
+  ///DB：テーブルカラム
   static const String KEY_name = "名前";
   static const String KEY_gender = "性別";
   static const String KEY_birthday = "生年月日";
   static const String KEY_createdTime = "作成日";
   static const String KEY_updatedTime = "更新日";
 
-  UserInfo({this.name = "", this.gender = "", this.birthDay = ""});
+  UserInfo({required this.name, required this.gender, required this.birthDay, required this.accountInfo}) {
+    createdTime = Timestamp.now();
+    updatedTime = Timestamp.now();
+  }
 
 
   AccountInfo? getAccount() {
@@ -33,7 +40,8 @@ class UserInfo extends Model{
     this.accountInfo = accountInfo;
   }
 
-  Map getMap() {
+  @override
+  Map<String, dynamic> getMap() {
     return {
       KEY_name: name,
       KEY_gender: gender,
@@ -46,11 +54,15 @@ class UserInfo extends Model{
 
     return {
       KEY_name: mapUserInfo[KEY_name],
-      KEY_gender: mapUserInfo[KEY_gender],
+      KEY_gender: mapUserInfo[KEY_gender].getCode(),
       KEY_birthday: mapUserInfo[KEY_birthday],
       KEY_createdTime: Timestamp.now(),
       KEY_updatedTime: Timestamp.now()
     };
+  }
+
+  void create() {
+    Users.create(this);
   }
 
 

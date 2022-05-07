@@ -1,15 +1,11 @@
-import 'dart:collection';
-import 'dart:ffi';
-
 // ignore: library_prefixes
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
-import 'package:firebase_core/firebase_core.dart';
+import 'package:training_note/catalog/gender_cat.dart';
 import 'package:training_note/firebase/firestore/users.dart';
 import 'package:training_note/model/account_info.dart';
 import 'package:training_note/model/user_info.dart';
 
-import 'package:training_note/util/keys.dart';
-
+///アカウント情報のサーバー連携用クラス
 class Authentication {
   static final FirebaseAuth.FirebaseAuth _firebaseAuth = FirebaseAuth.FirebaseAuth.instance;
   static const String KEY_email = "メールアドレス";
@@ -24,49 +20,38 @@ class Authentication {
   static const String VAL_NG = "NG";
   static const String VAL_AuthError = "Firebase登録エラー";
 
-  static const String KEY_result = AccountInfo.KEY_result;
-  static const String KEY_details = AccountInfo.KEY_details;
-
   ///ユーザ登録処理<br>
   ///■機能概要： ユーザ情報を登録する<br>
   ///■前提条件：　すべての入力情報がnull値でないこと。<br>
   ///■入力情報：<br>
   ///   String email -メールアドレス<br>
   ///   String password -パスワード<br>
-  ///   String passwordConfirmation -パスワード（確認用）
-  ///   String name -ユーザー名
-  ///   String gender -性別
-  ///   String birthday -誕生日
+  ///   String passwordConfirmation -パスワード（確認用）<br>
+  ///   String name -ユーザー名<br>
+  ///   String gender -性別<br>
+  ///   String birthday -誕生日<br>
   ///<br>
   ///■返却値：<br>
   ///Map<String, dynamic> 返却値<br>
   ///&#009;       1.ユーザ登録ができた場合<br>
-  ///&#009;&#009;   KEY: KEY_result<br>
-  ///&#009;&#009;   VAL: VAL_OK -String<br>
-  ///&#009;&#009;   KEY: KEY_userInfo<br>
-  ///&#009;&#009;   VAL: 登録したユーザ情報 -UserModel<br>
+  ///&#009;&#009;   KEY: String result<br>
+  ///&#009;&#009;   VAL: bool true<br>
+  ///&#009;&#009;   KEY: String userInfo<br>
+  ///&#009;&#009;   VAL: UserInfo 登録したユーザ情報<br>
   ///<br>
   ///&#009;       2.ユーザ情報に不正があった場合<br>
-  ///&#009;&#009;   KEY: KEY_result<br>
-  ///&#009;&#009;   VAL: VAL_NG -String<br>
-  ///&#009;&#009;   KEY: KEY_details -String<br>
-  ///&#009;&#009;   VAL: エラー詳細情報 -Map<br>
-  ///&#009;&#009;&#009;   KEY: KEY_{email, password, passwordConfirm, name, gender, birthday} -String<br>
-  ///&#009;&#009;&#009;   VAL: 各入力情報に対するエラー内容 -String<br>
-  ///<br>
-  ///&#009;       3.入力情報不正チェックは問題なかったが、Firebase登録中にエラーになった場合<br>
-  ///&#009;&#009;   KEY: KEY_result<br>
-  ///&#009;&#009;   VAL: VAL_AuthError -String<br>
-  static dynamic signUp({required String email, required String password, required String passwordConfirm, required String name, required String gender, required String birthDay}) async {
+  ///&#009;&#009;   KEY: String result<br>
+  ///&#009;&#009;   VAL: bool false<br>
+  static Future<Map<String, dynamic>> signUp({required String email, required String password, required String passwordConfirm, required String name, required GenderCat gender, required String birthDay}) async {
+    bool result = false;
+    Map<String, dynamic> mapResult = {
+      "result": result
+    };
 
     AccountInfo newAccount = AccountInfo(email: email, password: password, passwordConfirmation: passwordConfirm);
 
-    Map mapResult = newAccount.registerJudge();
-    bool _result = mapResult[KEY_result];
 
-    if(!_result) {
-      return mapResult;
-    }
+
 
   try {
       print("【Logger】--ユーザ登録開始[FirebaseAuth]--");
@@ -81,48 +66,43 @@ class Authentication {
       print('------エラーログ【START】------');
       print(e);
       print('------エラーログ【END】------');
-      _result = false;
+      return mapResult;
+
     }
 
-    UserInfo userInfo = UserInfo(name: name, gender: gender, birthDay: birthDay);
-    userInfo.setAccount(newAccount);
-    Users.createUser(userInfo);
+    UserInfo userInfo = UserInfo(name: name, gender: gender, birthDay: birthDay, accountInfo: newAccount);
+    Users.create(userInfo);
 
-    return userInfo;
-
-
+    mapResult["userInfo"] = userInfo;
+    return mapResult;
   }
 
+  ///TODO ユーザの入力情報に関するエラーハンドリングを作成する
+  static Future<Map<String, dynamic>> authCheck({String? email, String? password, String? passwordConfirm, String? name, GenderCat? genderCat, String? birthDay}) async{
+    Map<String, dynamic> mapDetails = {
+      "email": "",
+      "password": "",
+      "passwordConfirmation": "",
+      "name": "",
+      "gender": "",
+      "birthDay": ""
+    };
+    Map<String, dynamic> mapResult = {
+      "result": true,
+      "details": mapDetails
+    };
 
-  /// ユーザ登録が可能かどうかを判定し、結果を返却する<br>
-  /// <b>param:</b> Map&lt;String, dynamic&gt; ユーザ入力情報<br>
-  /// <b>return:</b> Map&lt;String, dynamic&gt; result<br>
-  ///   <b>&#009;ユーザ登録が可能な場合</b><br>
-  ///   &#009;・KEY: Keys.result<br>
-  ///   &#009;・VAL: true --bool<br>
-  ///   <b>&#009;ユーザ登録に問題がある場合</b><br>
-  ///   &#009;・KEY: Keys.result<br>
-  ///   &#009;・VAL: false --Bool<br>
-  ///   &#009;・KEY: Keys.details<br>
-  ///   &#009;・VAL:  Map&lt;String, dynamic&gt; details<br>
-  ///     &#009;&#009;・KEY: 入力情報.キー
-  ///     &#009;&#009;・VAL: エラー理由 --String<br>
-  static Map<String, dynamic> _isSignupValid(Map<String, dynamic> createUserDetails) {
-    Map<String, dynamic> mapResult = {};    //返却用変数
-    Map<String, dynamic> mapDetails = {};   //エラー理由詳細用
-
-    bool blnResult = true;
-    createUserDetails.forEach((key, value) {
-      if(value == null || value == "") {
-        blnResult = false;
-        mapDetails[key] = "null";
-      }
-    });
-
-    mapResult[Keys.result] = blnResult;
-    if(!blnResult) {
-      mapResult[Keys.details] = mapDetails;   //エラーが１件でもある場合はエラー詳細を返却する。
-    }
     return mapResult;
+  }
+
+  /// メールアドレスが重複していないか確認する機能
+  static Future<bool> emailCheck({required String email}) async{
+
+    var _result = await _firebaseAuth.fetchSignInMethodsForEmail(email);
+
+    if(_result.isNotEmpty) {
+      return false;
+    }
+    return true;
   }
 }
