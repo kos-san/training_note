@@ -24,37 +24,81 @@ class _HomePageState extends State<HomePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                  '合計トレーニング数',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
+              Card(
+                color: Colors.yellow,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      width: 180,
+                      height: 40,
+                      child: Center(
+                        child: Text('総エクササイズ数', style: TextStyle(fontSize: 16),),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 180,
+                      height: 40,
+                      child: Center(
+                        child: Text('232回', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(width: 20),
-              Text(
-                // 合計トレーニング数を表示する
-                  '〇〇日',
-                style: TextStyle(
-                  fontSize: 20,
-                  decoration: TextDecoration.underline,
+              Card(
+                color: Colors.yellow,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      width: 180,
+                      height: 40,
+                      child: Center(
+                        child: Text('月平均', style: TextStyle(fontSize: 16),),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 180,
+                      height: 40,
+                      child: Center(
+                        child: Text('19回', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: 20),
-          ElevatedButton(
-              onPressed: (){
-              },
-              child: Text('トレーニングを追加する'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 50,
-                  vertical: 20,
+          SizedBox(height: 5),
+          Card(
+            color: Colors.yellow,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Column(
+              children: [
+                const SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: Center(
+                    child: Text('週平均', style: TextStyle(fontSize: 16),),
+                  ),
                 ),
-                textStyle: TextStyle(
-                  fontSize: 16,
-                )
-              ),
+                const SizedBox(
+                  width: 180,
+                  height: 40,
+                  child: Center(
+                    child: Text('4.5回', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       )

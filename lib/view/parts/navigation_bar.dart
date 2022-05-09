@@ -13,10 +13,6 @@ class NavBar {
           label: '記録',
         ),
         const BottomNavigationBarItem(
-          icon: Icon(Icons.health_and_safety_sharp),
-          label: '体重',
-        ),
-        const BottomNavigationBarItem(
           icon: Icon(Icons.settings),
           label: '設定',
         ),
