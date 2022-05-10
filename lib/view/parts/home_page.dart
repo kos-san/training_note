@@ -25,9 +25,9 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Card(
-                color: Colors.yellow,
+                color: Color(0XFFE7E0EC),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
                   children: [
@@ -50,9 +50,9 @@ class _HomePageState extends State<HomePage> {
               ),
               SizedBox(width: 20),
               Card(
-                color: Colors.yellow,
+                color: Color(0XFFE7E0EC),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
                   children: [
@@ -77,9 +77,9 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(height: 5),
           Card(
-            color: Colors.yellow,
+            color: Color(0XFFE7E0EC),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(50),
+              borderRadius: BorderRadius.circular(30),
             ),
             child: Column(
               children: [

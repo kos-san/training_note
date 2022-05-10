@@ -43,7 +43,23 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('筋トレ記録アプリ'),
+        backgroundColor: Color(0XFFE7E0EC),
+        leading: Icon(Icons.arrow_back, color: Colors.black,),
+        title: Text('筋トレ記録アプリ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(6),
+            child: TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Color(0XFF6750A4),
+                  shape: StadiumBorder(),
+                  fixedSize: Size(85, 10),
+                ),
+                onPressed: ()=> {},
+                child: Text('一覧', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),)
+            ),
+          ),
+        ],
       ),
       body: HomePage(),
       bottomNavigationBar: NavBar.bottomNavigationBar(),
