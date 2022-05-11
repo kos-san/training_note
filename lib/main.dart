@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/navigation_bar.dart';
+import 'package:training_note/view/parts/training_list.dart';
 import 'package:training_note/view/test_view_page.dart';
 import 'package:training_note/view/parts/home_page.dart';
 
@@ -43,8 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        iconTheme: IconThemeData(
+            color: Colors.black
+        ),
         backgroundColor: Color(0XFFE7E0EC),
-        leading: Icon(Icons.arrow_back, color: Colors.black,),
         title: Text('筋トレ記録アプリ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
         actions: [
           Padding(
@@ -55,7 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   shape: StadiumBorder(),
                   fixedSize: Size(85, 10),
                 ),
-                onPressed: ()=> {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TrainingList()),
+                  );
+                },
                 child: Text('一覧', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),)
             ),
           ),
