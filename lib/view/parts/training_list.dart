@@ -8,6 +8,8 @@ class TrainingList extends StatefulWidget {
 }
 
 class _TrainingListState extends State<TrainingList> {
+  final items = List<String>.generate(20, (i) => "2021/04/$i");
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,9 +40,52 @@ class _TrainingListState extends State<TrainingList> {
           ),
         ],
       ),
-      body: Container(
-        child: Text("this is page 2"),
-      ),
+      body: Center(
+        child: ListView.builder(
+          itemCount: items.length,
+            itemBuilder: (context, index) {
+             return InkWell(
+               onTap: () async {
+                 await showDialog(
+                   context: context,
+                   builder: (context) {
+                     return StatefulBuilder(
+                         builder: (context, setState) {
+                           return SimpleDialog(
+                             backgroundColor: Colors.black,
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.all(Radius.circular(10.0))
+                             ),
+                               contentPadding: EdgeInsets.all(0.0),
+                               titlePadding: EdgeInsets.all(0.0),
+                               title: Container(
+                                 height: 400,
+                                 child: Scaffold(
+                                   body: Center(child: Text('${items[index]}', style: TextStyle(fontSize: 40.0),)),
+                                 ),
+                               )
+                           );
+                         }
+                     );
+                   },
+                 );
+               },
+               child: Card(
+                 margin: const EdgeInsets.all(20.0),
+                 child: Container(
+                     margin: const EdgeInsets.all(10.0),
+                     width: 300,
+                     height: 100,
+                     child: Text(
+                       '${items[index]}',
+                       style: TextStyle(fontSize: 24),
+                     )
+                 ),
+               ),
+             );
+            },
+        ),
+      )
     );
   }
 }
