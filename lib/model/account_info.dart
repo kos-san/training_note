@@ -1,20 +1,23 @@
 // ignore_for_file: constant_identifier_names
 import 'package:training_note/firebase/auth/authentication.dart';
 import 'package:training_note/model/model.dart';
+import 'package:training_note/model/model_keys.dart';
 
 ///ユーザ情報（Auth）専用のクラス
 class AccountInfo extends Model{
   String uid;
   String email;
   String password;
-  String passwordConfirmation;
 
+  static const String modelName = "accountIfo";
+  /// テーブルカラム定義
   static const String KEY_uid = "uid";
   static const String KEY_email = "メールアドレス";
   static const String KEY_password = "パスワード";
-  static const String KEY_passConfirm = "確認用パスワード";
 
-  AccountInfo({this.uid = "",this.email = "", this.password = "", this.passwordConfirmation = ""});
+  AccountInfo({this.uid = "",this.email = "", this.password = ""}) {
+    setModel(modelKey: ModelKeys.accountInfo, model: this);
+  }
 
   setUid(String uid) {
     this.uid = uid;
@@ -26,8 +29,7 @@ class AccountInfo extends Model{
     return {
       KEY_uid: uid,
       KEY_email: email,
-      KEY_password: password,
-      KEY_passConfirm: passwordConfirmation
+      KEY_password: password
     };
   }
 
