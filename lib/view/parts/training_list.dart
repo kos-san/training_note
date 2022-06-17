@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:training_note/main.dart';
+import 'package:training_note/view/parts/home_page.dart';
 
 class TrainingList extends StatefulWidget {
   @override
@@ -8,13 +8,8 @@ class TrainingList extends StatefulWidget {
 }
 
 class _TrainingListState extends State<TrainingList> {
-  final items = List<String>.generate(20, (i) => "2021/04/$i");
+  var items = List<String>.generate(20, (i) => "2021/04/$i");
   var _modal_items = {'one': {'training_name': 'ベンチプレス'}, 'two': {'training_name': 'インクラインダンベルプレス'}};
-  var _numbers = <String, String>{
-    'one': 'イチ',
-    'two': 'ニ',
-    'three': 'サン',
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +21,7 @@ class _TrainingListState extends State<TrainingList> {
         ),
         backgroundColor: Color(0XFFE7E0EC),
         title: Text('一覧', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+        automaticallyImplyLeading: false,
         actions: [
           Padding(
             padding: const EdgeInsets.all(6),
@@ -38,7 +34,7 @@ class _TrainingListState extends State<TrainingList> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>  MyHomePage(title: 'aaa',)),
+                    MaterialPageRoute(builder: (context) => HomePage()),
                   );
                 },
                 child: Text('カレンダー', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),)
@@ -88,51 +84,12 @@ class _TrainingListState extends State<TrainingList> {
                                          ),
                                          Text('${items[index]}'),
                                          IconButton(
-                                             onPressed: () async {
-                                               await showDialog(
-                                                   context: context,
-                                                   builder: (context) {
-                                                     return StatefulBuilder(
-                                                         builder: (context, setState) {
-                                                           return SimpleDialog(
-                                                             insetPadding: EdgeInsets.all(8),
-                                                             backgroundColor: Color(0XFFE7E0EC),
-                                                             shape: RoundedRectangleBorder(
-                                                                 borderRadius: BorderRadius.all(Radius.circular(10.0))
-                                                             ),
-                                                             contentPadding: EdgeInsets.all(0.0),
-                                                             titlePadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                                             title: Container(
-                                                               height: 100,
-                                                               width: 80,
-                                                               child: Column(
-                                                                 mainAxisAlignment: MainAxisAlignment.center,
-                                                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                                                 children: [
-                                                                   Row(
-                                                                     children: [
-                                                                       Icon(Icons.mode_edit, color: Color(0XFF6750A4)),
-                                                                       Text('ワークアウトを編集')
-                                                                     ],
-                                                                   ),
-                                                                   SizedBox(height: 15),
-                                                                   Row(
-                                                                     children: [
-                                                                       Icon(Icons.clear, color: Colors.red),
-                                                                       Text('削除')
-                                                                     ],
-                                                                   ),
-                                                                 ],
-                                                               ),
-                                                             ),
-                                                           );
-                                                         },
-                                                     );
-                                                   },
-                                               );
+                                             padding: EdgeInsets.all(0.0),
+                                             constraints: BoxConstraints(),
+                                             onPressed: ()=>{
+
                                              },
-                                             icon: Icon(Icons.more_horiz)
-                                         ),
+                                             icon: Icon(Icons.mode_edit, color: Color(0XFF6750A4)))
                                        ],
                                      ),
                                      Container(
@@ -162,19 +119,149 @@ class _TrainingListState extends State<TrainingList> {
                child: Card(
                  margin: const EdgeInsets.all(20.0),
                  child: Container(
-                     margin: const EdgeInsets.all(10.0),
+                     padding: EdgeInsets.all(10.0),
                      width: 300,
                      height: 100,
-                     child: Text(
-                       '${items[index]}',
-                       style: TextStyle(fontSize: 24),
+                     child: Row(
+                       crossAxisAlignment: CrossAxisAlignment.start,
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                       children: [
+                         Text(
+                           '${items[index]}',
+                           style: TextStyle(fontSize: 24),
+                         ),
+                         IconButton(
+                             icon: Icon(Icons.more_horiz),
+                             padding: EdgeInsets.all(0.0),
+                             constraints: BoxConstraints(),
+                             onPressed: () async {
+                               await showDialog(
+                                 context: context,
+                                 builder: (context) {
+                                   return StatefulBuilder(
+                                     builder: (context, setState) {
+                                       return SimpleDialog(
+                                         insetPadding: EdgeInsets.all(8),
+                                         backgroundColor: Color(0XFFE7E0EC),
+                                         shape: RoundedRectangleBorder(
+                                             borderRadius: BorderRadius.all(Radius.circular(10.0))
+                                         ),
+                                         contentPadding: EdgeInsets.all(0.0),
+                                         titlePadding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                         title: Container(
+                                           height: 100,
+                                           width: 80,
+                                           child: Column(
+                                             mainAxisAlignment: MainAxisAlignment.center,
+                                             crossAxisAlignment: CrossAxisAlignment.center,
+                                             children: [
+                                               Row(
+                                                 children: [
+                                                   Icon(Icons.mode_edit, color: Color(0XFF6750A4)),
+                                                   Text('ワークアウトを編集')
+                                                 ],
+                                               ),
+                                               SizedBox(height: 15),
+                                               GestureDetector(
+                                                 onTap: () async {
+                                                   await showDialog(
+                                                     context: context,
+                                                     builder: (context) {
+                                                       return StatefulBuilder(
+                                                         builder: (context, setState) {
+                                                           return SimpleDialog(
+                                                             insetPadding: EdgeInsets.all(8),
+                                                             backgroundColor: Color(0XFFE7E0EC),
+                                                             shape: RoundedRectangleBorder(
+                                                                 borderRadius: BorderRadius.all(Radius.circular(10.0))
+                                                             ),
+                                                             contentPadding: EdgeInsets.all(0.0),
+                                                             titlePadding: EdgeInsets.fromLTRB(20, 40, 20, 10),
+                                                             title: Container(
+                                                               height: 200,
+                                                               child: Column(
+                                                                 crossAxisAlignment: CrossAxisAlignment.center,
+                                                                 mainAxisAlignment: MainAxisAlignment.center,
+                                                                 children: [
+                                                                   Row(
+                                                                     children: [
+                                                                       Text('${items[index]}'),
+                                                                     ],
+                                                                   ),
+                                                                   Row(
+                                                                     children: [
+                                                                       Text('このワークアウトを本当に削除しますか？', style: TextStyle(fontSize: 16),),
+                                                                     ],
+                                                                   ),
+                                                                   SizedBox(
+                                                                     width: double.infinity,
+                                                                     child: ElevatedButton(
+                                                                       onPressed: () async {
+                                                                         print('${items[index]}');
+                                                                         await items.removeAt(index);
+                                                                         await Navigator.push(
+                                                                           context,
+                                                                           MaterialPageRoute(builder: (context) => TrainingList()),
+                                                                         );
+                                                                         setState((){});
+                                                                       },
+                                                                       child: Text('削除'),
+                                                                       style: ElevatedButton.styleFrom(
+                                                                         primary: Colors.red,
+                                                                         onPrimary: Colors.white,
+                                                                         shape: StadiumBorder(),
+                                                                       ),
+                                                                     ),
+                                                                   ),
+                                                                   SizedBox(height: 20),
+                                                                   SizedBox(
+                                                                     width: double.infinity,
+                                                                     child: ElevatedButton(
+                                                                       onPressed: ()=>{
+                                                                         Navigator.of(context).pop()
+                                                                       },
+                                                                       child: Text('キャンセル'),
+                                                                       style: ElevatedButton.styleFrom(
+                                                                         primary: Color(0XFFD9D9D9),
+                                                                         onPrimary: Colors.black,
+                                                                         shape: StadiumBorder(),
+                                                                       ),
+                                                                     ),
+                                                                   ),
+                                                                 ],
+                                                               ),
+                                                             ),
+                                                           );
+                                                         },
+                                                       );
+                                                     },
+                                                   );
+                                                 },
+                                                 child: Row(
+                                                   children: [
+                                                     Icon(Icons.clear, color: Colors.red),
+                                                     Text('削除')
+                                                   ],
+                                                 ),
+                                               ),
+                                             ],
+                                           ),
+                                         ),
+                                       );
+                                     },
+                                   );
+                                 },
+                               );
+                             },
+                         ),
+                       ],
                      )
                  ),
                ),
              );
             },
         ),
-      )
+      ),
     );
   }
 }

@@ -1,9 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:training_note/view/parts/navigation_bar.dart';
+import 'package:training_note/view/parts/select_exercise.dart';
 import 'package:training_note/view/parts/training_list.dart';
-import 'package:training_note/view/test_view_page.dart';
 import 'package:training_note/view/parts/home_page.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 
 void main() async {
@@ -40,38 +40,51 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  var _selectedIndex = 0;
+
+  var _pages = <Widget>[
+    HomePage(),
+    SelectExercise(),
+    TrainingList(),
+  ];
+
+  void _onTapItem(int index){
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        iconTheme: IconThemeData(
-            color: Colors.black
-        ),
-        backgroundColor: Color(0XFFE7E0EC),
-        title: Text('筋トレ記録アプリ', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(6),
-            child: TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Color(0XFF6750A4),
-                  shape: StadiumBorder(),
-                  fixedSize: Size(85, 10),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => TrainingList()),
-                  );
-                },
-                child: Text('一覧', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),)
-            ),
+      body: PersistentTabView(
+        context,
+        screens: _pages,
+        items: [
+          PersistentBottomNavBarItem(
+            icon: Icon(Icons.home),
+            activeColorPrimary: Color(0XFF6750A4),
+            title: ("Home")
           ),
+          PersistentBottomNavBarItem(
+            icon: Icon(Icons.add),
+            activeColorPrimary: Color(0XFF6750A4),
+            activeColorSecondary: Colors.white,
+            title: ("Add")
+          ),
+          PersistentBottomNavBarItem(
+            icon: Icon(Icons.settings),
+            activeColorPrimary: Color(0XFF6750A4),
+            title: ("Settings")
+          )
         ],
+        backgroundColor: Color(0XFFE7E0EC),
+        decoration: NavBarDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          colorBehindNavBar: Colors.white,
+        ),
+        navBarStyle: NavBarStyle.style15,
       ),
-      body: HomePage(),
-      bottomNavigationBar: NavBar.bottomNavigationBar(),
-      );
+    );
   }
 }
