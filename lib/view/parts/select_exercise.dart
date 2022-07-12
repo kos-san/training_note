@@ -88,11 +88,24 @@ class _SelectExerciseState extends State<SelectExercise> {
     return _widgets;
   }
 
+  void _addItem(String selectedItem, String exerciseName){
+    setState(() {
+      _trainings[selectedItem]!.add(exerciseName);
+    });
+    print(_trainings);
+  }
+
   var _controller = TextEditingController();
 
   String? isSelectedItem = '胸';
 
   String? _exerciseName = '';
+
+  @override
+  void dispose(){
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -176,8 +189,10 @@ class _SelectExerciseState extends State<SelectExercise> {
                                             ),
                                             onPressed: ()=>{
                                               print('エクササイズ名: ${_exerciseName}, 部位: ${isSelectedItem}'),
-                                              _trainings[isSelectedItem]?.add(_exerciseName!),
                                               print(_trainings),
+                                              _addItem(isSelectedItem!, _exerciseName!),
+                                              _controller.clear(),
+                                              Navigator.pop(context)
                                             },
                                           )
                                         ],

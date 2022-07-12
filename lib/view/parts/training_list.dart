@@ -11,6 +11,12 @@ class _TrainingListState extends State<TrainingList> {
   var items = List<String>.generate(20, (i) => "2021/04/$i");
   var _modal_items = {'one': {'training_name': 'ベンチプレス'}, 'two': {'training_name': 'インクラインダンベルプレス'}};
 
+  void _removeItem(int index){
+    setState(() {
+      items.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,12 +204,11 @@ class _TrainingListState extends State<TrainingList> {
                                                                      child: ElevatedButton(
                                                                        onPressed: () async {
                                                                          print('${items[index]}');
-                                                                         await items.removeAt(index);
-                                                                         await Navigator.push(
+                                                                         _removeItem(index);
+                                                                         Navigator.push(
                                                                            context,
                                                                            MaterialPageRoute(builder: (context) => TrainingList()),
                                                                          );
-                                                                         setState((){});
                                                                        },
                                                                        child: Text('削除'),
                                                                        style: ElevatedButton.styleFrom(
