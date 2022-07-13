@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/add_training_details.dart';
 import 'package:training_note/view/parts/home_page.dart';
 
+String trainingName = "";
+
 class SelectExercise extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SelectExerciseState();
@@ -39,6 +41,8 @@ class _SelectExerciseState extends State<SelectExercise> {
                   ),
               ),
               onPressed: () {
+                trainingName = training;
+                print(trainingName);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => AddTrainingDetails(training: _exerciseName!)),

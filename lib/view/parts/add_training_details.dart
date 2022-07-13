@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:training_note/view/parts/home_page.dart';
+import 'package:training_note/view/parts/select_exercise.dart';
 
 class AddTrainingDetails extends StatefulWidget {
 
@@ -16,9 +17,10 @@ class AddTrainingDetails extends StatefulWidget {
 
 class _AddTrainingDetails extends State<AddTrainingDetails> {
 
-  List<String> _trainings = ["ベンチプレス", "インクラインダンベルフライ"];
+  List<String> _trainings = [trainingName];
 
   List<List<TextEditingController>>? _controllers = [[]];
+
   List<List<TextEditingController>>? _controllersForReps = [[]];
 
   String? _weight = "";
@@ -26,7 +28,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
   String? _reps = "";
 
   //this is a test variable
-  Map<String, List<Map<String, int>>> _trainingSet =  {"ベンチプレス": [{"重量": 0, "レップス": 0}, {"重量": 0, "レップス": 0}], "インクラインダンベルフライ": [{"重量": 0, "レップス": 0}]};
+  Map<String, List<Map<String, int>>> _trainingSet =  {trainingName: [{"重量": 0, "レップス": 0}]};
 
 
   @override
@@ -116,7 +118,6 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
           child: ListView.builder(
               itemCount: _trainings.length,
               itemBuilder: (context, index){
-                // _addController(index);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -145,7 +146,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: _trainingSet[_trainings[index]]!.length,
+                      itemCount: _trainingSet[_trainings[index]]?.length,
                       itemBuilder: (context, index2){
                         // _addTextEditingController(index);
                         return SizedBox(
@@ -219,7 +220,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                     ),
                     GestureDetector(
                       onTap: (){
-                        print('${_trainings[index]}');
+                        print(trainingName);
                         _addItem(_trainings[index]);
                         _addTextEditingController(index);
                       },
