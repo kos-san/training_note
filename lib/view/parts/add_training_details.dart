@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:training_note/view/parts/home_page.dart';
 import 'package:training_note/view/parts/select_exercise.dart';
+import 'package:flutter/cupertino.dart';
 
 class AddTrainingDetails extends StatefulWidget {
 
@@ -17,6 +18,8 @@ class AddTrainingDetails extends StatefulWidget {
 
 class _AddTrainingDetails extends State<AddTrainingDetails> {
 
+  DateTime date = DateTime.now();
+
   List<String> _trainings = [trainingName];
 
   List<List<TextEditingController>>? _controllers = [[]];
@@ -28,8 +31,25 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
   String? _reps = "";
 
   //this is a test variable
-  Map<String, List<Map<String, int>>> _trainingSet =  {trainingName: [{"重量": 0, "レップス": 0}]};
+  Map<String, List<Map<String, dynamic>>> _trainingSet =  {trainingName: [{"重量": 0, "レップス": 0}]};
 
+  void _showDialog(Widget child){
+    showCupertinoModalPopup<void>(
+        context: context,
+        builder: (BuildContext context) => Container(
+              height: 216,
+              padding: const EdgeInsets.only(top: 6.0),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              child: SafeArea(
+                top: false,
+                child: child,
+              ),
+        )
+    );
+  }
 
   @override
   void initState(){
@@ -54,7 +74,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
 
   //this is a test method1
   void _addItem(String trainingName){
-    Map<String, int> _set = {"重量": 0, "レップス": 0};
+    Map<String, dynamic> _set = {"重量": 0, "レップス": 0};
     setState(() {
       _trainingSet[trainingName]!.add(_set);
     });
@@ -89,7 +109,27 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
             color: Colors.black
         ),
         backgroundColor: Color(0XFFE7E0EC),
-        title: Text('2022/06/01', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+        title: CupertinoButton(
+          onPressed: () => _showDialog(
+            CupertinoDatePicker(
+                initialDateTime: date,
+                mode: CupertinoDatePickerMode.date,
+                use24hFormat: true,
+                onDateTimeChanged: (DateTime newDate){
+                  setState(() {
+                    date = newDate;
+                  });
+                }
+            ),
+          ),
+          child: Text(
+            '${date.year}/${date.month}/${date.day}',
+            style: const TextStyle(
+              fontSize: 22.0,
+            ),
+          ),
+        ),
+        // title: Text('2022/06/01', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
         automaticallyImplyLeading: false,
         actions: [
           Padding(
@@ -101,10 +141,12 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                   fixedSize: Size(110, 10),
                 ),
                 onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
-                  );
+                  print(_trainingSet);
+                  print(date);
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => HomePage()),
+                  // );
                 },
                 child: Text('完了', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),)
             ),
@@ -167,10 +209,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                                         keyboardType: TextInputType.number,
                                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                         onChanged: (String value){
-                                          setState((){
-                                            _weight =  value;
-                                            print(_weight);
-                                          });
+                                            _trainingSet[_trainings[index]]![index2]["重量"] = value;
                                         },
                                         decoration: InputDecoration(
                                           enabledBorder: OutlineInputBorder(
@@ -189,10 +228,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                                         keyboardType: TextInputType.number,
                                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                         onChanged: (String value){
-                                          setState((){
-                                            _reps =  value;
-                                            print(_reps);
-                                          });
+                                            _trainingSet[_trainings[index]]![index2]["レップス"] = value;
                                         },
                                         decoration: InputDecoration(
                                           enabledBorder: OutlineInputBorder(
