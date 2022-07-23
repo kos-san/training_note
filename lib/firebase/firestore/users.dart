@@ -1,49 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:training_note/catalog/gender_cat.dart';
-import 'package:training_note/model/account_info.dart';
-import 'package:training_note/model/user_info.dart';
-import 'package:training_note/util/parts.dart';
+import 'package:quiver/strings.dart';
+import 'package:training_note/firebase/abstract_firebase.dart';
+import 'package:training_note/model/model.dart';
+import 'package:training_note/model/model_array.dart';
+import 'package:training_note/model/training/training.dart';
+import 'package:training_note/model/user.dart';
+import 'package:training_note/util/keys.dart';
+import 'package:training_note/util/log.dart';
 
-class Users {
+class Users extends AbstractFirebase{
   static const String tableName = "users";
   static final _firestoreInstance = FirebaseFirestore.instance;
   static final CollectionReference users = _firestoreInstance.collection(tableName);
 
+  static dynamic create({required Model user}) {
+    String? _uid = user.getValue(key: Keys.uid);
+
+    if(isBlank(_uid)) {
+      return false;
+    }
+    users.doc(_uid).set(AbstractFirebase.setDatabase(model: user));
 
 
-  static void create(UserInfo userInfo) {
-    AccountInfo? accountInfo = userInfo.getAccount();
-    String? uid = accountInfo?.getValue(key: AccountInfo.KEY_uid);
-
-    users.doc(uid).set(userInfo.createUser());
-
+    return true;
   }
 
-  static Future<Map<String, dynamic>> read(AccountInfo accountInfo) async{
-    bool result = false;
-    Map<String, dynamic> mapResult = {
-      "result": result
-    };
+  static Future<dynamic> read(User user) async{
 
-    String uid = accountInfo.getValue(key: AccountInfo.KEY_uid);
+    String _uid = user.getValue(key: Keys.accountId);
     try {
-      var _result = await users.doc(uid).get();
-      String _name = _result[UserInfo.KEY_name];
-      String _genderCode = _result[UserInfo.KEY_gender];
-      String _birthDay = _result[UserInfo.KEY_birthday];
-      Timestamp createdTime = _result[UserInfo.KEY_createdTime];
-      Timestamp updatedTime = _result[UserInfo.KEY_updatedTime];
+      var _result = await users.doc(_uid).get();
+      String _name = _result[Keys.name.getKeyName()];
+      String _gender = _result[Keys.gender.getKeyName()];
+      String _birthDay = _result[Keys.birthDay.getKeyName()];
+      Timestamp _createdTime = _result[Keys.createdTime.getKeyName()];
+      Timestamp _updatedTime = _result[Keys.createdTime.getKeyName()];
 
-      UserInfo userInfo = UserInfo(name: _name, gender: GenderCat.convertCat(_genderCode), birthDay: _birthDay, accountInfo: accountInfo, createdTime: createdTime, updatedTime: updatedTime);
-
-      mapResult["userInfo"] = userInfo;
-      result = true;
-    } catch(e) {
-      print(e);
+      user.setValue(key: Keys.name, val: _name);
+      user.setValue(key: Keys.gender, val: _gender);
+      user.setValue(key: Keys.birthDay, val: _birthDay);
+      user.setValue(key: Keys.createdTime, val: _createdTime);
+      user.setValue(key: Keys.updatedTime, val: _updatedTime);
+    } on Exception catch(e) {
+      Log.error(exception: e);
+      return false;
     }
 
-    return mapResult;
+    return true;
   }
 
 }

@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:training_note/catalog/gender_cat.dart';
-import 'package:training_note/firebase/auth/authentication.dart';
-import 'package:training_note/model/account_info.dart';
 import 'package:training_note/model/model.dart';
-import 'package:training_note/model/model_keys.dart';
-import 'package:training_note/model/user_info.dart';
+import 'package:training_note/model/model_pool.dart';
+import 'package:training_note/model/user.dart';
+import 'package:training_note/model/account.dart';
+import 'package:training_note/model/training/training.dart';
+import 'package:training_note/util/keys.dart';
+import 'package:training_note/util/parts.dart';
 
-///ユーザ登録の画面確認用のテストクラス
-///後で削除予定
 class TestViewPage extends StatefulWidget {
   const TestViewPage({Key? key}) : super(key: key);
 
@@ -16,9 +16,28 @@ class TestViewPage extends StatefulWidget {
 }
 
 class _TestViewPageState extends State<TestViewPage> {
+  Model account = Account();
+
+  List<Training> trainingList = [
+    Training(
+        id: "1",
+        accountId: "1",
+        trainingDate: "20220101",
+        createdTime: Timestamp.now(),
+        updatedTime: Timestamp.now(),
+    ),
+    Training(
+        id: "2",
+        accountId: "1",
+        trainingDate: "20220101",
+        createdTime: Timestamp.now(),
+        updatedTime: Timestamp.now(),
+    ),
+  ];
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +56,7 @@ class _TestViewPageState extends State<TestViewPage> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
               child: Container(
                 width: 300,
                 child: TextField(
@@ -56,21 +75,15 @@ class _TestViewPageState extends State<TestViewPage> {
 
             ElevatedButton(
                 onPressed: () async{
-                  // dynamic result = Authentication.signUp(email: emailController.text, password: passwordController.text, name: "名前", gender: GenderCat.man, birthDay: "20220416");
-                  // print(result.name);
-                  // print(result.birthDay);
-                  // print(result.gender);
-                  // print(result.accountInfo);
-                  dynamic result = Authentication.signIn(email: emailController.text, password: passwordController.text);
-                  // var result = await Authentication.authCheck(email: emailController.text);
-                  // var result = await AccountInfo.emailCheck(email: emailController.text);
-                  // print(result);
-                  // AccountInfo accountInfo = AccountInfo(uid: "twsttwst", email: "testtest@test.com", password: "password");
-                  // UserInfo userInfo = UserInfo(name: "makoto", gender: GenderCat.man, birthDay: "1995/09/17", accountInfo: accountInfo);
-                  // userInfo.create();
-                  //
-                  // Model? modelUserInfo = accountInfo.getModel(modelKey: ModelKeys.userInfo);
-                  // print(modelUserInfo!.getValue(key: "名前"));
+                  User user = User();
+                  (account as Account).signUp(user: user, paswordConfirm: "aa");
+                  // account.setModel(key: Keys.account, model: account);
+                  // account.setValue(key: Keys.email, val: "makoto1212128@test.com");
+                  // account.setValue(key: Keys.password, val: "password");
+                  // account.setValue(key: Keys.passwordConfirm, val: "password");
+                  // // await (account as Account).signUp();
+                  // // print(user.getValue(key: Keys.accountId));
+
                 },
                 child: const Text('アカウント作成')
             ),
