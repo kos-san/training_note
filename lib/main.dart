@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:training_note/view/parts/add_training_details.dart';
 import 'package:training_note/view/parts/select_exercise.dart';
 import 'package:training_note/view/parts/training_list.dart';
 import 'package:training_note/view/parts/home_page.dart';
@@ -44,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var _pages = <Widget>[
     HomePage(),
-    SelectExercise(),
+    AddTrainingDetails(),
     TrainingList(),
   ];
 
