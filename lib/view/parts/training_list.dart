@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/home_page.dart';
 import 'package:intl/intl.dart';
 
-List<dynamic> test = [[{"date": DateTime.now().subtract(Duration(days: 1))}, {"exercise": [{"プルアップ": [{"weight": [20, 10]}, {"reps": [12, 12]}]}]}], [{"date": DateTime.now().subtract(Duration(days: 2))}, {"exercise": [{"ベンチプレス": [{"weight": [20, 10, 30]}, {"reps": [12, 12, 12]}]}]}]];
+List<dynamic> test = [[{"date": DateTime.now().subtract(Duration(days: 1))}, {"exercise": [{"プルアップ": [{"weight": [20, 10]}, {"reps": [12, 12]}]}]}], [{"date": DateTime.now().subtract(Duration(days: 2))}, {"exercise": [{"ベンチプレス": [{"weight": [20, 10, 30]}, {"reps": [12, 12, 12]}]}, {"スクワット": [{"weight": [20, 10, 30]}, {"reps": [12, 12, 12]}]}]}]];
 
 
 class TrainingList extends StatefulWidget {
@@ -211,102 +211,65 @@ class _TrainingListState extends State<TrainingList> {
                                   borderRadius: BorderRadius.all(Radius.circular(10.0))
                                ),
                                contentPadding: EdgeInsets.all(0.0),
-                               titlePadding: EdgeInsets.all(0.0),
-                               title: Container(
-                                 padding: EdgeInsets.all(10),
-                                 decoration: BoxDecoration(
-                                     color: Color(0XFFE7E0EC),
-                                     borderRadius: BorderRadius.circular(10),
-                                 ),
-                                 // height: 400,
-                                 child: Column(
+                               children: [
+                                 Row(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                    children: [
-                                     Row(
-                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                       children: [
-                                         IconButton(
-                                             padding: EdgeInsets.all(0.0),
-                                             constraints: BoxConstraints(),
-                                             onPressed: ()=> {
-                                               Navigator.of(context).pop()
-                                             },
-                                             icon: Icon(Icons.clear)
-                                         ),
-                                         Text('${test[index][0]["date"]}'),
-                                         IconButton(
-                                             padding: EdgeInsets.all(0.0),
-                                             constraints: BoxConstraints(),
-                                             onPressed: ()=>{
+                                     IconButton(
+                                         padding: EdgeInsets.all(0.0),
+                                         constraints: BoxConstraints(),
+                                         onPressed: ()=> {
+                                           Navigator.of(context).pop()
+                                         },
+                                         icon: Icon(Icons.clear)
+                                     ),
+                                     Text('${test[index][0]["date"]}'),
+                                     IconButton(
+                                         padding: EdgeInsets.all(0.0),
+                                         constraints: BoxConstraints(),
+                                         onPressed: ()=>{
 
-                                             },
-                                             icon: Icon(Icons.mode_edit, color: Color(0XFF6750A4)))
-                                       ],
-                                     ),
-                                     SizedBox(
-                                       height: 200,
-                                       child: ListView.builder(
-                                          // shrinkWrap: true,
-                                          itemCount: test[index][1]["exercise"]!.length,
-                                          itemBuilder: (context, index2) {
-                                            var key = test[index][1]["exercise"][index2].keys.elementAt(index);
-                                            return SizedBox(
-                                              height: 200,
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text('${key}'),
-                                                    ],
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Text("セット"),
-                                                      Text("Kg"),
-                                                      Text("レップス"),
-                                                    ],
-                                                  ),
-                                                  // Expanded(
-                                                  //   child: ListView.builder(
-                                                  //     shrinkWrap: true,
-                                                  //     physics: NeverScrollableScrollPhysics(),
-                                                  //     itemCount: test[index][1]["exercise"][index2][key][0]["weight"]!
-                                                  //         .length,
-                                                  //     itemBuilder: (context, index3) {
-                                                  //       return SizedBox(
-                                                  //         width: MediaQuery.of(context).size.width * 0.8,
-                                                  //         child: Column(
-                                                  //           children: [
-                                                  //             SizedBox(
-                                                  //               width: 300,
-                                                  //               child: Row(
-                                                  //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  //                 children: [
-                                                  //                   Text('${index2 + 1}'),
-                                                  //                   Text('${test[index][1]["exercise"][index2][key][0]["weight"][index3]}'),
-                                                  //                   Text('${test[index][1]["exercise"][index2][key][0]["reps"][index3]}'),
-                                                  //                 ],
-                                                  //               ),
-                                                  //             ),
-                                                  //           ],
-                                                  //         ),
-                                                  //       );
-                                                  //     },
-                                                  //   ),
-                                                  // ),
-                                                ],
-                                              ),
-                                            );
-                                          }
-                                       ),
-                                     ),
-                                   ],
+                                         },
+                                         icon: Icon(Icons.mode_edit, color: Color(0XFF6750A4)))
+                                   ]
                                  ),
-                               ),
+                                 Container(
+                                   height: 400,
+                                   width: 400,
+                                   child: ListView.builder(
+                                       itemCount: test[index][1]["exercise"]!.length,
+                                       itemBuilder: (context, index2){
+                                         var key = test[index][1]["exercise"][index2].keys.elementAt(0);
+                                         return Column(
+                                           children: [
+                                             Text(
+                                               '${key}',
+                                               style: TextStyle(
+                                                 fontWeight: FontWeight.bold
+                                               ),
+                                             ),
+                                             ListView.builder(
+                                                 shrinkWrap: true,
+                                                 physics: NeverScrollableScrollPhysics(),
+                                                 itemCount: test[index][1]["exercise"][index2][key][0]["weight"].length,
+                                                 itemBuilder: (context, index3){
+                                                   return Row(
+                                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                     children: [
+                                                       Text('${index3 + 1} セット目'),
+                                                       Text('${test[index][1]["exercise"][index2][key][0]["weight"][index3]} kg'),
+                                                       Text('${test[index][1]["exercise"][index2][key][1]["reps"][index3]} レップス'),
+                                                     ],
+                                                   );
+                                                 }
+                                             )
+                                           ],
+                                         );
+                                       }
+                                   ),
+                                 )
+                               ],
                            );
                       }
                     );
