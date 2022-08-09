@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:training_note/main.dart';
+import 'package:training_note/view/parts/home_page.dart';
 import 'package:training_note/view/parts/select_exercise.dart';
 import 'package:training_note/view/parts/training_list.dart';
 
@@ -289,6 +291,93 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
       });
   }
 
+  Widget _cancellWorkout(){
+    Widget row;
+
+    row = GestureDetector(
+      onTap: () async {
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return StatefulBuilder(
+              builder: (context, setState) {
+                return SimpleDialog(
+                  insetPadding: EdgeInsets.all(8),
+                  backgroundColor: Color(0XFFE7E0EC),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))
+                  ),
+                  contentPadding: EdgeInsets.all(0.0),
+                  titlePadding: EdgeInsets.fromLTRB(20, 40, 20, 10),
+                  title: Container(
+                    height: 200,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Text('このワークアウトを本当にキャンセルしますか？', style: TextStyle(fontSize: 16),),
+                          ],
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              setState((){
+                                testData = [{"date": DateTime.now()}, {"exercise": []}];
+                              });
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => MyHomePage(title: 'test')),
+                              );
+                            },
+                            child: Text('削除'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red,
+                              onPrimary: Colors.white,
+                              shape: StadiumBorder(),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: ()=>{
+                              Navigator.of(context).pop()
+                            },
+                            child: Text('キャンセル'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Color(0XFFD9D9D9),
+                              onPrimary: Colors.black,
+                              shape: StadiumBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'ワークアウトをキャンセルする',
+              style: TextStyle(color: Colors.red)
+            )
+          ]
+      ),
+    );
+
+    return row;
+  }
+
   Widget _buildBody(){
     Widget body;
 
@@ -298,6 +387,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
           children: [
             Text("エクササイズを追加してください"),
             _buildModal(),
+            _cancellWorkout()
           ],
         ),
       );
@@ -468,6 +558,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                 },
               ),
               _buildModal(),
+              _cancellWorkout()
             ],
           ),
         ),
@@ -523,6 +614,7 @@ class _AddTrainingDetails extends State<AddTrainingDetails> {
                   print(date);
                   _addNewExerciseToList();
                   _cleanTestDate();
+                  testFunction();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => TrainingList()),

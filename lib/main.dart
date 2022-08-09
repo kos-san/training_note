@@ -1,16 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:training_note/view/parts/add_training_details.dart';
-import 'package:training_note/view/parts/select_exercise.dart';
 import 'package:training_note/view/parts/training_list.dart';
 import 'package:training_note/view/parts/home_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  initializeDateFormatting('ja').then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

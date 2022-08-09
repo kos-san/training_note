@@ -1,6 +1,25 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:training_note/view/parts/training_list.dart';
+
+Map<DateTime, List> eventsList = {};
+
+void testFunction(){
+  if(eventsList.isNotEmpty){
+    eventsList = {};
+  }
+  int i;
+  for(i = 0; i < test.length; i++){
+    DateTime day = test[i][0]["date"];
+    if(!eventsList.containsKey(day)){
+        eventsList[day] = [i];
+      } else {
+      eventsList[day]!.add(i);
+    }
+  }
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,8 +29,73 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime? _selectedDay;
+  DateTime _focusedDay = DateTime.now();
+
+  int getHashCode(DateTime key){
+    return key.day * 100000 + key.month * 10000 + key.year;
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    _selectedDay = _focusedDay;
+      // int i;
+      // for(i = 0; i < test.length; i++){
+      //   DateTime day = test[i][0]["date"];
+      //   if(!eventsList.containsKey(day)){
+      //     eventsList[day] = [i];
+      //   } else if(eventsList.length == 0) {
+      //     break;
+      //   } else {
+      //     eventsList[day]!.add(i);
+      //   }
+      // }
+    testFunction();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    final _events = LinkedHashMap<DateTime, List>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(eventsList);
+
+    List getEventForDay(DateTime day){
+      return _events[day] ?? [];
+    }
+
+    Widget _buildEventsMarker(DateTime date, List events) {
+      return Positioned(
+        right: 5,
+        bottom: 5,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.red[300],
+          ),
+          width: 16.0,
+          height: 16.0,
+          child: Center(
+            child: Text(
+              '${events.length}',
+              style: TextStyle().copyWith(
+                color: Colors.white,
+                fontSize: 12.0,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -45,9 +129,45 @@ class _HomePageState extends State<HomePage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           TableCalendar(
-              focusedDay: DateTime.now(),
+              locale: 'ja_JP',
+              focusedDay: _focusedDay,
               firstDay: DateTime.utc(2020, 1, 1),
               lastDay: DateTime.utc(2030, 1, 1),
+              eventLoader: getEventForDay,
+              headerStyle: HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true
+              ),
+              calendarFormat: _calendarFormat,
+              onFormatChanged: (format){
+                if(_calendarFormat != format){
+                  setState(() {
+                    _calendarFormat = format;
+                  });
+                }
+              },
+              selectedDayPredicate: (day){
+                return isSameDay(_selectedDay, day);
+              },
+              onDaySelected: (selectedDay, focusedDay){
+                if(!isSameDay(_selectedDay, selectedDay)){
+                  setState(() {
+                    _selectedDay = selectedDay;
+                    _focusedDay = focusedDay;
+                  });
+                }
+                print(_focusedDay);
+              },
+              onPageChanged: (focusedDay){
+                _focusedDay = focusedDay;
+              },
+              calendarBuilders: CalendarBuilders(
+                markerBuilder: (context, date, events){
+                  if (events.isNotEmpty){
+                    return _buildEventsMarker(date, events);
+                  }
+                }
+              ),
           ),
           SizedBox(height: 20),
           Row(

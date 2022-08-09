@@ -13,7 +13,6 @@ class TrainingList extends StatefulWidget {
 
 class _TrainingListState extends State<TrainingList> {
   var items = List<String>.generate(20, (i) => "2021/04/$i");
-  var _modal_items = {'one': {'training_name': 'ベンチプレス'}, 'two': {'training_name': 'インクラインダンベルプレス'}};
 
 
   void _removeItem(int index){
